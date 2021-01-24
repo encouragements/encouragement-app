@@ -6,14 +6,17 @@ import io.ktor.client.request.*
 internal object EncouragementRepository {
     private const val BASE_URL =
         "https://raw.githubusercontent.com/encouragements/encouragement-app/main/encouragements"
-    private const val LATEST_POINTER_URL = "$BASE_URL/latest"
+    private const val LIST_URL = "$BASE_URL/list"
+
+    private val client = HttpClient()
 
     suspend fun getLatestEnc(): Encouragement {
-        val client = HttpClient()
-        val latestPointer = client.get<String>(LATEST_POINTER_URL)
+        val encPointers = client.get<String>(LIST_URL)
+        val pointers = encPointers.split(",")
+        val latestPointer = pointers.last()
         val latestUrl = "$BASE_URL/$latestPointer"
-        val body = client.get<String>(latestUrl)
-
-        return Encouragement(number = )
+        val latestBody = client.get<String>(latestUrl)
+        val latestNumber = latestPointer.toInt()
+        return Encouragement(latestNumber, latestBody)
     }
 }

@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
         val tv: TextView = findViewById(R.id.text_view)
 
         GlobalScope.launch {
-            val text = SharedMain.latestEnc()
-            tv.post { tv.text = text }
+            val enc = SharedMain.latestEnc()
+            tv.post { tv.text = "#${enc.number}\n${enc.body}" }
         }
     }
 }

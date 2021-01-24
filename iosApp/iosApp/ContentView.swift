@@ -13,7 +13,8 @@ struct ContentView: View {
         case .loading:
             return Text("Loading...")
         case .success(let enc):
-            return Text(enc)
+            let text = "#\(enc.number)\n\n\(enc.body)"
+            return Text(text)
         case .error:
             return Text("Error occurred")
         }
@@ -24,7 +25,7 @@ extension ContentView {
     class ViewModel: ObservableObject {
         enum LoadableEnc {
             case loading
-            case success(String)
+            case success(Encouragement)
             case error
         }
         

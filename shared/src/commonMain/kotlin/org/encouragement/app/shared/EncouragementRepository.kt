@@ -8,9 +8,8 @@ internal object EncouragementRepository {
         "https://raw.githubusercontent.com/encouragements/encouragement-app/main/encouragements"
     private const val LIST_URL = "$BASE_URL/list"
 
-    private val client = HttpClient()
-
     suspend fun getLatestEnc(): Encouragement {
+        val client = HttpClient()
         val encPointers = client.get<String>(LIST_URL)
         val pointers = encPointers.split(",")
         val latestPointer = pointers.last()

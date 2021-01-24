@@ -2,14 +2,10 @@ package org.encouragement.app.androidApp
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import org.encouragement.app.shared.Greeting
 import android.widget.TextView
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-
-suspend fun greet(): String {
-    return Greeting().greeting()
-}
+import org.encouragement.app.shared.SharedMain
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         val tv: TextView = findViewById(R.id.text_view)
 
         GlobalScope.launch {
-            val text = greet()
+            val text = SharedMain.latestEnc()
             tv.post { tv.text = text }
         }
     }

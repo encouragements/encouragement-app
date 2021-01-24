@@ -5,15 +5,15 @@ struct ContentView: View {
     @ObservedObject private(set) var viewModel: ViewModel
     
     var body: some View {
-        messageView()
+        encView()
     }
     
-    private func messageView() -> Text {
-        switch viewModel.message {
+    private func encView() -> Text {
+        switch viewModel.enc {
         case .loading:
             return Text("Loading...")
-        case .success(let message):
-            return Text(message)
+        case .success(let enc):
+            return Text(enc)
         case .error:
             return Text("Error occurred")
         }
@@ -22,27 +22,25 @@ struct ContentView: View {
 
 extension ContentView {
     class ViewModel: ObservableObject {
-        enum LoadableGreeting {
+        enum LoadableEnc {
             case loading
             case success(String)
             case error
         }
         
-        let greeting: Greeting
-        @Published var message = LoadableGreeting.loading
+        @Published var enc = LoadableEnc.loading
         
-        init(greeting: Greeting) {
-            self.greeting = greeting
-            loadMessage()
+        init() {
+            loadEnc()
         }
         
-        func loadMessage() {
-            self.message = .loading
-            greeting.greeting { message, error in
-                if let message = message {
-                    self.message = .success(message)
+        func loadEnc() {
+            self.enc = .loading
+            SharedMain.init().latestEnc { enc, error in
+                if let enc = enc {
+                    self.enc = .success(enc)
                 } else {
-                    self.message = .error
+                    self.enc = .error
                 }
             }
         }
@@ -51,6 +49,6 @@ extension ContentView {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(viewModel: .init(greeting: Greeting()))
+        ContentView(viewModel: .init())
     }
 }

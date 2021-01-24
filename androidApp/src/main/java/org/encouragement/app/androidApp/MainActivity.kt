@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import org.encouragement.app.shared.Greeting
 import android.widget.TextView
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
-fun greet(): String {
+suspend fun greet(): String {
     return Greeting().greeting()
 }
 
@@ -15,6 +17,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val tv: TextView = findViewById(R.id.text_view)
-        tv.text = greet()
+
+        GlobalScope.launch {
+            val text = greet()
+            tv.post { tv.text = text }
+        }
     }
 }
